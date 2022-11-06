@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const algorithm = 'aes-256-ctr';
-let secretKey = 'Suhee123';
+let secretKey = 'pFqJB39xg5XeSt5jxdw9GDigmI3IpQRE';
 
 const decrypt = (hash) => {
   const decipher = crypto.createDecipheriv(
