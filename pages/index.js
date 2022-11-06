@@ -1,8 +1,6 @@
 import { useState } from 'react';
 
 export default function Home() {
-  const [isPasswordGenerating, setIsPasswordGenerating] = useState(false);
-
   const [generatedPassword, setGeneratedPassword] = useState('');
   const [passwordLength, setPasswordLength] = useState(20);
   const [numberInclude, setNumberInclude] = useState(true);
@@ -15,7 +13,6 @@ export default function Home() {
   const [decryptedText, setDecryptedText] = useState('');
 
   const generatePassword = async (e) => {
-    setIsPasswordGenerating(true);
     if (passwordLength > 100) {
       alert('Your password length is bigger than 100');
       return;
@@ -25,33 +22,40 @@ export default function Home() {
     );
     const { password } = await response.json();
     setGeneratedPassword(password);
-    navigator.clipboard.writeText(password);
-    setIsPasswordGenerating(false);
   };
   const encrypt = async (e) => {
-    const response = await fetch(
-      `/api/encrypt?secret=${secret}&text=${encryptText}`
-    );
+    const response = await fetch(`/api/encrypt`, {
+      method: 'POST',
+      body: JSON.stringify({
+        secret,
+        encryptText,
+      }),
+    });
     const result = await response.json();
     setEncryptedText(JSON.stringify(result));
-    navigator.clipboard.writeText(JSON.stringify(result));
+    // navigator.clipboard.writeText(JSON.stringify(result));
   };
   const decrypt = async (e) => {
     const response = await fetch(
-      `/api/decrypt?secret=${secret}&text=${decryptText}`
+      `/api/decrypt?secret=${secret}&text=${decryptText}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          secret,
+          decryptText,
+        }),
+      }
     );
     const result = await response.json();
     setDecryptedText(result.password);
-    navigator.clipboard.writeText(JSON.stringify(result));
+    // navigator.clipboard.writeText(JSON.stringify(result));
   };
 
   return (
     <div className='container'>
       <div className='block'>
         <h3 className='title'>Generate key</h3>
-        <button onClick={generatePassword}>
-          {isPasswordGenerating ? 'Generating' : 'Generate'}
-        </button>
+        <button onClick={generatePassword}>Generate</button>
 
         <input value={generatedPassword} onChange={() => {}} />
         <div>
@@ -66,7 +70,6 @@ export default function Home() {
           <input
             value={numberInclude}
             onChange={(e) => setNumberInclude(e.target.value)}
-            type='boolean'
           />
           <br />
           symbol
@@ -87,7 +90,7 @@ export default function Home() {
             e.code === 'Enter' || (e.code === 'NumpadEnter' && encrypt())
           }
         />
-        <input value={encryptedText} placeholder='Secret' />
+        <input value={encryptedText} placeholder='Secret' onChange={() => {}} />
       </div>
       <div className='block'>
         <h3 className='title'>Decrypt</h3>
@@ -98,7 +101,7 @@ export default function Home() {
             e.code === 'Enter' || (e.code === 'NumpadEnter' && decrypt())
           }
         />
-        <input value={decryptedText} placeholder='Secret' />
+        <input value={decryptedText} placeholder='Secret' onChange={() => {}} />
       </div>
     </div>
   );

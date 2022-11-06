@@ -18,15 +18,19 @@ const decrypt = (hash) => {
 };
 
 export default function handler(req, res) {
-  let response = 'no';
-  if (req.query.secret) {
-    secretKey = req.query.secret;
-  }
+  if (req.method === 'POST') {
+    let response = 'no';
+    const body = JSON.parse(req.body);
+    if (body.secret) {
+      secretKey = body.secret;
+    } else {
+      secretKey = 'pFqJB39xg5XeSt5jxdw9GDigmI3IpQRE';
+    }
 
-  if (req.query.text) {
-    const result = decrypt(JSON.parse(req.query.text));
-    response = result;
+    if (body.decryptText) {
+      const result = decrypt(JSON.parse(body.decryptText));
+      response = result;
+    }
+    res.status(200).json({ password: response });
   }
-
-  res.status(200).json({ password: response });
 }

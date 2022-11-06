@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const algorithm = 'aes-256-ctr';
-let secretKey = 'pFqJB39xg5XeSt5jxdw9GDigmI3IpQRE';
+let secretKey = '';
 
 const encrypt = (text) => {
   const iv = crypto.randomBytes(16);
@@ -16,15 +16,18 @@ const encrypt = (text) => {
 };
 
 export default function handler(req, res) {
-  let response = { password: 'no' };
-  if (req.query.secret) {
-    secretKey = req.query.secret;
+  if (req.method === 'POST') {
+    let response = { password: 'no' };
+    const body = JSON.parse(req.body);
+    if (body.secret) {
+      secretKey = body.secret;
+    } else {
+      secretKey = 'pFqJB39xg5XeSt5jxdw9GDigmI3IpQRE';
+    }
+    if (body.encryptText) {
+      const test = encrypt(body.encryptText);
+      response = test;
+    }
+    res.status(200).json(response);
   }
-
-  if (req.query.text) {
-    const test = encrypt(req.query.text);
-    response = test;
-  }
-
-  res.status(200).json(response);
 }
