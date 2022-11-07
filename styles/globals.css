@@ -13,6 +13,8 @@ a {
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,3 +26,181 @@ a {
     background: black;
   }
 }
+
+
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+.main-container > .container {
+  /* background-color: aqua; */
+}
+
+/* Extra small screen */
+@media only screen and (max-width: 576px) {
+  body {
+    background-color: lightblue;
+  }
+  .main-container >.container { 
+    width: 100vw;
+  }
+
+}
+
+/* Small screen */
+@media only screen and (min-width: 576px)  and (max-width: 768px) {
+  body {
+    background-color: red;
+  }
+  .main-container >.container { 
+    width: 80vw;
+  }
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  body {
+    /* background-color: blue; */
+  }
+
+  .main-container > .container { 
+    width: 60vw;
+  }
+
+}
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  body {
+    background-color: green;
+  }
+  .main-container > .container { 
+    width: 40vw;
+  }
+}
+
+
+@media only screen and (min-width: 1200px) and (max-width: 1400px) {
+  body {
+    background-color: yellow;
+  }
+  .main-container > .container { 
+    width: 30vw;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  body {
+    background-color: orange;
+  }
+  .main-container > .container { 
+    width: 20vw;
+  }
+}
+
+h3 {
+  text-align: center;
+  font-size: 30px;
+  margin: 10px 0;
+}
+
+.input-group {
+  position: relative;
+}
+
+.random-string {
+  line-height: 30px;
+  font-size: 20px;
+  padding: 1rem 6rem 1rem 2rem;
+  border: none;
+  outline: none;
+  width: 100% ;
+  border-radius: 0.5rem 0.5rem 0 0 ;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  border-bottom: solid 10px #368149;
+  /* position: absolute; */
+}
+.icon1, .icon2 {
+  position: absolute;
+  color: #333f48;
+  top: calc(1rem + 5px);
+  cursor: pointer;
+  height: 20px ;
+  width: 20px;
+}
+
+.icon1 {
+  right: 4rem;
+}
+
+.icon2 {
+  right: 2rem;
+}
+
+.customize {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  margin: 10px 0;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  /* height: 250px; */
+}
+
+.customize > span {
+  grid-column: 1 / 4;
+  /* grid-area: 1 / 1 / 4 /2 ; */
+  display: block;
+  font-size: 22px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #f0f2f5;
+  padding-bottom: 10px;
+}
+
+.range-length {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+  display: grid;
+  grid-template-columns: 25% 75%;
+  grid-template-rows: 70% 30%;
+  padding: 1rem 0 0 1rem;
+}
+
+.range-length > div {
+  grid-column: 1/3;
+  grid-row: 1/2;
+}
+.range-length > .input {
+  cursor: pointer;
+  grid-column: 2/3;
+  grid-row: 2/3;
+}
+.range-length > .output {
+  grid-column: 1/2;
+  grid-row: 2/3;
+  padding-left: 0.8rem;
+  width: 3.5rem;
+  outline: none;
+  border: 1px solid black;
+
+}
+
+.range-length > .output:focus {
+  border: 1px solid red;
+}
+
+.char-type {
+  grid-column: 3/4;
+  padding: 1rem 0 0 1rem;
+}
+.char-type > div > input {
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.char-type > div > label{
+  user-select: none;
+  cursor: pointer;
+}
+/* random-string */
