@@ -41,7 +41,7 @@ a {
 /* Extra small screen */
 @media only screen and (max-width: 576px) {
   body {
-    background-color: lightblue;
+    /* background-color: lightblue; */
   }
   .main-container >.container { 
     width: 100vw;
@@ -52,7 +52,7 @@ a {
 /* Small screen */
 @media only screen and (min-width: 576px)  and (max-width: 768px) {
   body {
-    background-color: red;
+    /* background-color: red; */
   }
   .main-container >.container { 
     width: 80vw;
@@ -62,7 +62,7 @@ a {
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
   body {
-    /* background-color: blue; */
+    background-color: blue;
   }
 
   .main-container > .container { 
@@ -72,7 +72,7 @@ a {
 }
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
   body {
-    background-color: green;
+    /* background-color: green; */
   }
   .main-container > .container { 
     width: 40vw;
@@ -82,7 +82,7 @@ a {
 
 @media only screen and (min-width: 1200px) and (max-width: 1400px) {
   body {
-    background-color: yellow;
+    /* background-color: yellow; */
   }
   .main-container > .container { 
     width: 30vw;
@@ -91,7 +91,7 @@ a {
 
 @media only screen and (min-width: 1400px) {
   body {
-    background-color: orange;
+    /* background-color: orange; */
   }
   .main-container > .container { 
     width: 20vw;
