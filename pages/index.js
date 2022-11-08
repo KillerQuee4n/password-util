@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { HiOutlineKey } from 'react-icons/hi';
 import { MdContentCopy, MdRepeat } from 'react-icons/md';
@@ -162,6 +163,7 @@ const GenerateRandomString = () => {
 };
 
 const CryptingString = () => {
+  const inputElement = React.createRef();
   const [isEncryptTab, setIsEncryptTab] = useState(true);
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -209,6 +211,10 @@ const CryptingString = () => {
       decrypt(e.target.value);
     }
   };
+
+  useEffect(() => {
+    inputElement.current.focus();
+  }, []);
   return (
     <div className='card crypting'>
       <span
@@ -228,7 +234,11 @@ const CryptingString = () => {
         <HiOutlineKey style={{ cursor: 'pointer' }} onClick={enterSecret} />
       </span>
       <div className='section'>
-        <input value={input} onChange={changeInputAndEncrypt} />
+        <input
+          ref={inputElement}
+          value={input}
+          onChange={changeInputAndEncrypt}
+        />
         <div className='crypto-output'>
           <MdContentCopy className='icon' onClick={copyOutput} />
           <input value={output} disabled />
