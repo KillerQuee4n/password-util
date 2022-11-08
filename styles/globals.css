@@ -105,6 +105,7 @@ h3 {
 }
 
 .input-group {
+  margin-top: 1rem;
   position: relative;
 }
 
@@ -120,35 +121,39 @@ h3 {
   border-bottom: solid 10px #368149;
   /* position: absolute; */
 }
-.icon1, .icon2 {
+.icon {
   position: absolute;
   color: #333f48;
-  top: calc(1rem + 5px);
   cursor: pointer;
   height: 20px ;
   width: 20px;
 }
 
 .icon1 {
+  top: calc(1rem + 5px);
   right: 4rem;
 }
 
 .icon2 {
+  top: calc(1rem + 5px);
   right: 2rem;
+}
+
+.card {
+  margin: 10px 0;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  border-radius: 0.5rem;
+  padding: 2rem;
 }
 
 .customize {
   display: grid;
   grid-template-columns: auto auto;
   grid-template-rows: auto auto;
-  margin: 10px 0;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
-  border-radius: 0.5rem;
-  padding: 2rem;
-  /* height: 250px; */
 }
 
-.customize > span {
+
+.card > span {
   grid-column: 1 / 4;
   /* grid-area: 1 / 1 / 4 /2 ; */
   display: block;
@@ -204,3 +209,40 @@ h3 {
   cursor: pointer;
 }
 /* random-string */
+
+.crypting > .section {
+  display: flex;
+  flex-direction: column;
+}
+
+.crypting > .section > input {
+  line-height: 30px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 10px;
+  outline: none;
+  font-size: 24px;
+}
+
+
+.tab-title {
+  user-select: none;
+  cursor: pointer;
+}
+
+.crypto-output {
+  position: relative;
+}
+
+.crypto-output > .icon {
+  right: 1rem;
+  top: 15px;
+}
+
+.crypto-output > input {
+  line-height: 30px;
+  padding: 0.5rem 3rem 0.5rem 1rem ;
+  margin-bottom: 10px;
+  outline: none;
+  font-size: 24px;
+  width: 100%;
+}

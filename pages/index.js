@@ -1,61 +1,13 @@
 import { useEffect, useState } from 'react';
-import { BsGrid3X3GapFill } from 'react-icons/bs';
+import { HiOutlineKey } from 'react-icons/hi';
 import { MdContentCopy, MdRepeat } from 'react-icons/md';
 
 export default function Home() {
-  // Generate random string component
-  const [generatedPassword, setGeneratedPassword] = useState('');
-  const [passwordLength, setPasswordLength] = useState(20);
-  const [numberInclude, setNumberInclude] = useState(true);
-  const [symbolInclude, setSymbolInclude] = useState(true);
-
-  const [secret, setSecret] = useState('');
-  const [encryptText, setEncryptText] = useState('');
-  const [encryptedText, setEncryptedText] = useState('');
-  const [decryptText, setDecryptText] = useState('');
-  const [decryptedText, setDecryptedText] = useState('');
-
-  const generatePassword = async (e) => {
-    if (passwordLength > 100) {
-      alert('Your password length is bigger than 100');
-      return;
-    }
-    const response = await fetch(
-      `/api/generate-password?length=${passwordLength}&number=${numberInclude}&symbol=${symbolInclude}`
-    );
-    const { password } = await response.json();
-    setGeneratedPassword(password);
-  };
-  const encrypt = async (e) => {
-    const response = await fetch(`/api/encrypt`, {
-      method: 'POST',
-      body: JSON.stringify({
-        secret,
-        encryptText,
-      }),
-    });
-    const result = await response.json();
-    setEncryptedText(JSON.stringify(result));
-  };
-  const decrypt = async (e) => {
-    const response = await fetch(
-      `/api/decrypt?secret=${secret}&text=${decryptText}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          secret,
-          decryptText,
-        }),
-      }
-    );
-    const result = await response.json();
-    setDecryptedText(result.password);
-  };
-
   return (
     <div className='main-container'>
       <div className='container'>
         <GenerateRandomString />
+        <CryptingString />
         {/* <div className='block'>
           <h3 className='title'>Encrypt</h3>
           <input value={secret} onChange={(e) => setSecret(e.target.value)} />
@@ -93,61 +45,83 @@ export default function Home() {
   );
 }
 
-const initialRandStr = {
-  str: '',
-  length: 20,
-  type: {
-    lowercase: true,
-    uppercase: true,
-    number: true,
-    symbol: true,
-  },
+const initialRandStrType = {
+  lowercase: true,
+  uppercase: true,
+  number: true,
+  symbol: true,
 };
+const randStrLengthInitial = 20;
 const GenerateRandomString = () => {
-  const [randStr, setRandStr] = useState(initialRandStr);
+  const [isChangingRandStr, setIsChangingRandStr] = useState(false);
+  const [randStr, setRandStr] = useState('');
+  const [randStrLength, setRandStrLength] = useState(randStrLengthInitial);
+  const [randStrType, setRandStrType] = useState(initialRandStrType);
+
+  const checkValues = (string) => {
+    let lowerCaseInclude = false;
+    let upperCaseInclude = false;
+    return initialRandStrType;
+  };
+
+  const clipboardRandStr = () => {
+    navigator.clipboard.writeText(randStr);
+  };
+  const regenerate = () => {
+    generateRandomString();
+  };
+
   const onChange = (e) => {
-    const { name, id, checked, value } = e.target;
-    if (['str', 'length'].includes(name)) {
-      setRandStr({ ...randStr, [name]: value });
+    const { id, checked, name, value } = e.target;
+    if (name === 'str') {
+      setRandStr(value);
+      const length = value.length;
+      const type = checkValues(value);
+      setRandStrLength(length);
+      setRandStrType(type);
+    }
+    if (name === 'length') {
+      setRandStrLength(value);
+      setIsChangingRandStr(!isChangingRandStr);
     }
     if (name === 'type') {
-      setRandStr({
-        ...randStr,
-        type: { ...randStr.type, [id]: checked },
+      setRandStrType({
+        ...randStrType,
+        [id]: checked,
       });
+      setIsChangingRandStr(!isChangingRandStr);
     }
   };
 
   const generateRandomString = async () => {
-    const { length, type } = randStr;
-    // const response = await fetch(
-    //   `/api/generate-password?length=${randStr.length}&number=${numberInclude}&symbol=${symbolInclude}`
-    // );
-    for (const key in Object.keys(type)) {
-      console.log(key);
-    }
+    let query = `length=${randStrLength}&`;
+    Object.keys(randStrType).forEach((e) => {
+      query += `${e}=${randStrType[e]}&`;
+    });
+    const response = await fetch(`/api/generate-password?${query}`);
+    const result = await response.json();
+    const { string } = result;
+    setRandStr(string);
   };
 
   useEffect(() => {
-    console.log('String changeing');
     generateRandomString();
-  }, [randStr]);
+  }, [isChangingRandStr]);
 
   return (
     <div className='block'>
-      <h3 className='title'>Generate random string</h3>
       <div className='input-group'>
-        <MdContentCopy className='icon1' />
-        <MdRepeat className='icon2' />
+        <MdContentCopy className='icon icon1' onClick={clipboardRandStr} />
+        <MdRepeat className='icon icon2' onClick={regenerate} />
         <input
           className='random-string'
           name='str'
-          value={randStr.str}
+          value={randStr}
           onChange={onChange}
         />
       </div>
 
-      <div className='customize'>
+      <div className='customize card'>
         <span>Customize your random string</span>
         <div className='range-length'>
           <div>String length</div>
@@ -155,25 +129,25 @@ const GenerateRandomString = () => {
             className='input'
             type='range'
             name='length'
-            value={randStr.length}
+            value={randStrLength}
             onChange={onChange}
           />
           <input
             className='output'
             type='number'
             name='length'
-            value={randStr.length}
+            value={randStrLength}
             onChange={onChange}
           />
         </div>
         <div className='char-type'>
-          {Object.keys(randStr.type).map((type) => (
+          {Object.keys(randStrType).map((type) => (
             <div key={type}>
               <input
                 id={type}
                 name='type'
                 type='checkbox'
-                checked={randStr.type[type]}
+                checked={randStrType[type]}
                 onChange={onChange}
               />
               <label htmlFor={type}>
@@ -181,6 +155,83 @@ const GenerateRandomString = () => {
               </label>
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CryptingString = () => {
+  const [isEncryptTab, setIsEncryptTab] = useState(true);
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+  const [secret, setSecret] = useState('');
+  const changeTab = () => {
+    setIsEncryptTab(!isEncryptTab);
+    setInput('');
+    setOutput('');
+  };
+
+  const enterSecret = () => {
+    const secret_input = prompt('Please enter your secret');
+    secret_input !== null ? setSecret(secret_input) : null;
+  };
+  const copyOutput = () => {
+    navigator.clipboard.writeText(output);
+  };
+  const encrypt = async (text) => {
+    const response = await fetch(`/api/encrypt`, {
+      method: 'POST',
+      body: JSON.stringify({
+        secret,
+        encryptText: text,
+      }),
+    });
+    const result = await response.json();
+    setOutput(JSON.stringify(result));
+  };
+  const decrypt = async (text) => {
+    const response = await fetch(`/api/decrypt`, {
+      method: 'POST',
+      body: JSON.stringify({
+        secret,
+        decryptText: text,
+      }),
+    });
+    const result = await response.json();
+    setOutput(result.password);
+  };
+  const changeInputAndEncrypt = (e) => {
+    setInput(e.target.value);
+    if (isEncryptTab) {
+      encrypt(e.target.value);
+    } else {
+      decrypt(e.target.value);
+    }
+  };
+  return (
+    <div className='card crypting'>
+      <span
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}>
+        {isEncryptTab ? (
+          <span className='tab-title' onDoubleClick={changeTab}>
+            Encrypt your string
+          </span>
+        ) : (
+          <span className='tab-title' onDoubleClick={changeTab}>
+            Decrypt your string
+          </span>
+        )}
+        <HiOutlineKey style={{ cursor: 'pointer' }} onClick={enterSecret} />
+      </span>
+      <div className='section'>
+        <input value={input} onChange={changeInputAndEncrypt} />
+        <div className='crypto-output'>
+          <MdContentCopy className='icon' onClick={copyOutput} />
+          <input value={output} disabled />
         </div>
       </div>
     </div>
